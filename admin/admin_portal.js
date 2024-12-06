@@ -380,11 +380,12 @@ document.addEventListener('DOMContentLoaded', async function() {
         challengesGrid.innerHTML = ''; // Clear existing content
     
         // Add existing challenge cards
-        challenges.forEach(challenge => {
-            const card = createChallengeCard(challenge);
-            challengesGrid.appendChild(card);
-        });
-    
+        if (challenges || challenges.length !== 0) {
+            challenges.forEach(challenge => {
+                const card = createChallengeCard(challenge);
+                challengesGrid.appendChild(card);
+            });
+        }
         // Add "Create new challenge" card
         const newChallengeCard = createNewChallengeCard();
         challengesGrid.appendChild(newChallengeCard);
@@ -485,10 +486,12 @@ document.addEventListener('DOMContentLoaded', async function() {
     setupFormListeners();
     await fetchChallenges();
     
-    for (let i = 0; i < dashboardData.challenges.length; i++) {
-        bookedData = await fetchDashboardData(dashboardData.challenges[i].serviceID);
-        //console.log(bookedData);
-        dashboardData['participants'].push(bookedData[0]);
+    // Fetch dashboard data
+    if (dashboardData.challenges) {
+        for (let i = 0; i < dashboardData.challenges.length; i++) {
+            bookedData = await fetchDashboardData(dashboardData.challenges[i].serviceID);
+            dashboardData['participants'].push(bookedData[0]);
+        }
     }
     //console.log(dashboardData);
     updateDashboard(dashboardData);
