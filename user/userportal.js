@@ -203,9 +203,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     email: responseMessage.data.email,
                     firstname: responseMessage.data.firstname,
                     lastname: responseMessage.data.lastname,
-                    facebook: responseMessage.data.fblink,
-                    instagram: responseMessage.data.xlink,
-                    x: responseMessage.data.xlink,
+                    facebook: responseMessage.data.facebook,
+                    instagram: responseMessage.data.instagram,
+                    x: responseMessage.data.x,
                     phone: responseMessage.data.phone
                 }
                 return profileNewOrder;
