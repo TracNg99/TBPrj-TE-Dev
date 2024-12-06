@@ -599,7 +599,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function uploadPhotosContent() {
         // Get all uploaded images
         const preview = document.getElementById('preview');
-        if (!preview.files){
+        if (!preview.querySelectorAll('img')){
             alert("Please upload at least one image!");
             return;
         }
