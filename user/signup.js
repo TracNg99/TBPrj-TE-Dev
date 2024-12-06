@@ -15,11 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
   infoTheme.style.margin = "0";      
   infoTheme.style.padding = "0";     
 
-  let fieldID = ["userFirstName", "userLasName", "userEmail", "userPassword", "userPhone", "userNotes"];
-  let uploadInfoText = {action: "sign up", role: "user", password: "1234"};
-  let dbFieldId = ["firstname", "lastname", "email", "password", "phone", "preferences"];
+  let fieldID = ["accountName","userEmail", "userPassword", "userFirstName", "userLasName"];
+  let uploadInfoText = {action: "sign up", role: "user", password: ""};
+  let dbFieldId = ["username", "email", "password", "firstname", "lastname"];
   let responseMessage = "";
   let responseWindow = "none"; 
+  let serverURL = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
 
   function renderPage(toggle, displaycontent) {
     infoTheme.innerHTML = `
@@ -40,32 +41,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             ` : ''}
 
-            <!-- First Name Input -->
+            <!-- Username Input -->
             <div class="mb-4">
-                <label for="${fieldID[0]}" class="block text-gray-700 text-sm font-bold mb-2">First Name</label>
+                <label for="${fieldID[0]}" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
                 <input id="${fieldID[0]}" 
-                       type="text"
-                       name="first"
-                       autocomplete="given-name" 
-                       placeholder="Enter your first name"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-            </div>
-
-            <!-- Last Name Input -->
-            <div class="mb-4">
-                <label for="${fieldID[1]}" class="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
-                <input id="${fieldID[1]}" 
-                       type="text"
-                       name="last"
-                       autocomplete="family-name" 
-                       placeholder="Enter your last name"
+                       type="username"
+                       name="username"
+                       placeholder="Enter your username"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
             </div>
 
             <!-- Email Input -->
             <div class="mb-4">
-                <label for="${fieldID[2]}" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
-                <input id="${fieldID[2]}" 
+                <label for="${fieldID[1]}" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                <input id="${fieldID[1]}" 
                        type="email"
                        name="email"
                        autocomplete="email" 
@@ -75,32 +64,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <!-- Password Input -->
             <div class="mb-4">
-                <label for="${fieldID[3]}" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                <input id="${fieldID[3]}" 
+                <label for="${fieldID[2]}" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                <input id="${fieldID[2]}" 
+                       
                        type="password"
                        name="password"
                        placeholder="Enter your password"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
             </div>
 
-            <!-- Phone Input -->
+            <!-- Confirm Password Input -->
             <div class="mb-4">
-                <label for="${fieldID[4]}" class="block text-gray-700 text-sm font-bold mb-2">Phone</label>
-                <input id="${fieldID[4]}" 
-                       type="tel"
-                       name="phone"
-                       autocomplete="tel" 
-                       placeholder="Enter your phone number"
+                <label for="confirmPassword" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
+                <input id="confirmPassword" 
+                       type="password"
+                       name="password"
+                       placeholder="Verify your password"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
             </div>
 
-            <!-- Preferences Input -->
-            <div class="mb-6">
-                <label for="${fieldID[5]}" class="block text-gray-700 text-sm font-bold mb-2">Preferences</label>
-                <input id="${fieldID[5]}" 
+            <!-- First Name Input -->
+            <div class="mb-4">
+                <label for="${fieldID[3]}" class="block text-gray-700 text-sm font-bold mb-2">First Name</label>
+                <input id="${fieldID[3]}" 
                        type="text"
-                       name="preferences"
-                       placeholder="Enter your preferences"
+                       name="first"
+                       autocomplete="given-name" 
+                       placeholder="Enter your first name"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+            </div>
+
+            <!-- Last Name Input -->
+            <div class="mb-4">
+                <label for="${fieldID[4]}" class="block text-gray-700 text-sm font-bold mb-2">Last Name</label>
+                <input id="${fieldID[4]}" 
+                       type="text"
+                       name="last"
+                       autocomplete="family-name" 
+                       placeholder="Enter your last name"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
             </div>
 
@@ -121,7 +122,20 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>
     `;
     
+    const username = document.getElementById('accountName').value;
+    const email = document.getElementById('userEmail').value;
+    
+    const password = document.getElementById('userPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    if (password !== confirmPassword && password !== "" && confirmPassword !== "") {
+      renderPage('block', 'Passwords do not match');
+      return;
+    }
+
+
     document.getElementById("uploadInfo").onclick = async() => { await uploadContent(); };
+
   } 
   
   function navigateTo(page) {
@@ -129,12 +143,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   
   async function uploadContent() {
+
         for (let ii in fieldID) {
           uploadInfoText[dbFieldId[ii]] = document.getElementById(fieldID[ii]).value;
+
+        if (!uploadInfoText[dbFieldId[ii]] && dbFieldId[ii] !== "firstname" && dbFieldId[ii] !== "lastname") {
+          let displayField = dbFieldId[ii][0].toUpperCase() + dbFieldId[ii].substring(1);
+          renderPage('block', `${displayField} cannot be empty`);
+          return;
+        }
         }
 
         try {
-          let response = await fetch("https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer", {
+          let response = await fetch(serverURL, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -142,11 +163,13 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(uploadInfoText)
           });
           if (response.status !== 200) {
+            alert("Registration attempt failed!");
             console.log(response.status);
             responseMessage = await response.json;
             renderPage("block", responseMessage.message);
             throw new Error('Unable to fetch the data');
           } else {
+            alert("Your account has been created!");
             responseMessage = await response.json;
             console.log("HTTPS response status code:",response.status);
             console.log("HTTPS response content:",responseMessage.message);

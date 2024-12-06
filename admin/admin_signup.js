@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("Received response:", response.status, responseMessage.message);
                 renderPage('block', responseMessage.message);
             } else {
+                alert("Your account has been created!");
                 window.location.href = 'index.html';
             }
         } catch (error) {
