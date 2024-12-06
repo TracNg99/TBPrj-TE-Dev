@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         challengesCount = data.challenges ? data.challenges.length : 0;
         // Update statistics
         document.getElementById('totalChallenges').textContent = challengesCount;
-        document.getElementById('activeParticipants').textContent = challengesCount;
+        document.getElementById('activeParticipants').textContent = data.participants.filter(item => ('images' in item || 'contents' in item)).length || 0;
         document.getElementById('completedChallenges').textContent = data.participants.filter(item => ('images' in item || 'contents' in item)).length || 0;
         // Update active challenges list
         const challengesList = document.getElementById('activeChallengesList');
@@ -235,7 +235,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                         Participants:
                         ${matchedUsers.length}
                     </p>
-                    <img src="${challenge.qrUrl || ''}" alt="User Image" class="w-12 h-12 rounded-full mr-2">
                     ${matchedUsers.map((user,uidx) => `
                         <h4 class="pt-6 font-semibold text-lg">User #${uidx+1}: ${user.useremail}</h4>
                         ${user.images.map((image, index) => `
