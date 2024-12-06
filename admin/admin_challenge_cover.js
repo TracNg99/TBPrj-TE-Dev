@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Check authentication
+  if (window.businessEmail === 'default value') {
+    window.location.href = 'index.html';
+    return;
+  }
   const appContainer = document.getElementById('app');
   let userInputs = {
     title: "",
@@ -373,10 +378,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     }
 
-  function logout() {
-        window.updateBusinessEmail('');
-        window.updateBusinessName('');
-        window.updateServID('');
+    async function logout() {
+      try {
+          const response = await fetch(serverURL, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  action: "sign out",
+              })
+          });
+  
+          const responseData = await response.json();
+          if (response.status === 200) {
+              //updateDashboard(responseData.data);
+              //return responseData.data;
+              window.updateBusinessEmail(null);
+              return responseData.message;
+              //console.log(dashboardData);
+          }
+      } catch (error) {
+          console.error('Error fetching dashboard data:', error);
+      }
+        window.updateBusinessEmail('default value');
+        window.updateBusinessName('default value');
+        window.updateServID('default value');
         window.location.href = 'index.html';
     }
 

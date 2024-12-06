@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
     const appContainer = document.getElementById('app');
     //let valueFromQRCode;
     let urlParams;

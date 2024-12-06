@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     const signupForm = document.getElementById('signupForm');
     const errorMessage = document.getElementById('errorMessage');
     const requestURL = 'https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer';

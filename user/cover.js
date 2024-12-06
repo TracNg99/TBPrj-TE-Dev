@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  // Check authentication
+  if (window.signInEmail === 'default value') {
+    window.location.href = 'index.html';
+    return;
+  }
+
   const appContainer = document.getElementById('app');
   let data;
   let serverURL = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";

@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Check authentication
+    if (window.businessEmail === 'default value') {
+        window.location.href = 'index.html';
+        return;
+    }
+
     const appContainer = document.getElementById('app');
     let locations = [];
     let currentLocation = null;
@@ -305,19 +311,17 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             // Generate QR code with the URL and serviceID
             const baseUrl = window.location.origin + window.location.pathname.replace('admin/admin_challenge_locations.html', 'user/index.html');
-            console.log(baseUrl);
             const qrUrl = `${baseUrl}?serviceId=${window.serviceID}`;
             
-            // Create a canvas element to generate QR code
-            const canvas = document.createElement('canvas');
-            await QRCode.toCanvas(canvas, qrUrl, {
-                width: 200,
-                margin: 2
-            });
+            // Create QR Code using qrcode-generator
+            const qr = qrcode(0, 'L'); // 0: auto-version, L: error correction level
+            qr.addData(qrUrl);
+            qr.make();
 
-            // Convert canvas to base64 string
-            const qrCodeBase64 = canvas.toDataURL('image/png');
-
+            // Get QR code as base64 image with larger size
+            const qrCodeBase64 = qr.createDataURL(20, 4); // cellSize: 20 pixels, margin: 4 cells
+            console.log(qrCodeBase64);
+            console.log(qrCodeBase64.split(",")[1]);
             try {
                 const response = await fetch(requestLink, {
                     method: 'POST',
@@ -325,12 +329,14 @@ document.addEventListener("DOMContentLoaded", () => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        action: "upload qrcode",
+                        action: "qrcode challenge",
                         role: "services",
                         source: "platform",
+                        provider: window.businessName,
+                        type: "challenge",
                         searchField: "serviceID",
                         value: window.serviceID,
-                        images: qrCodeBase64.split(",")[1]
+                        image: qrCodeBase64.split(",")[1]
                     })
                 });
     
@@ -380,7 +386,15 @@ document.addEventListener("DOMContentLoaded", () => {
             
             const repsData = await response.json();
             if (response.status == 200 && repsData.data[0].contents) {
-                locations = repsData.data[0].contents;
+                let slideInfo = []; //responseMessage.data[0].contents
+                console.log("Location data:",repsData.data[0].contents);
+                for (let jj in repsData.data[0].contents) {
+                    item = repsData.data[0].contents;
+                    slideInfo.push(item.filter(e => e.locationID == `loc${jj}`)[0]);
+                    console.log(slideInfo);
+                }
+
+                locations = slideInfo;
                 console.log("Received response:", locations);
                 console.log(locations.length);
             }

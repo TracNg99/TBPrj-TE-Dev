@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', async function() {
     // Check authentication
+    if (window.businessEmail === 'default value') {
+        window.location.href = 'index.html';
+        return;
+    }
+    
     let requestLink = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
     let dashboardData = {
         challenges: null,
         participants: []
     };
     
-    if (!window.businessEmail) {
-        window.location.href = 'index.html';
-        return;
-    }
+
+    
 
     // Set admin email in header
     //document.getElementById('adminEmail').textContent = window.businessEmail;
@@ -97,14 +100,36 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            window.updateServID(null);
-            window.updateBusinessEmail(null);
-            window.updateBusinessName(null);
-            localStorage.removeItem('serviceID');
-            localStorage.removeItem('businessEmail');
-            localStorage.removeItem('businessName');
-            window.location.href = 'index.html';
+        document.getElementById('logoutBtn').addEventListener('click', async function() {
+            try {
+                    const response = await fetch(serverURL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: "sign out",
+                        })
+                    });
+            
+                    const responseData = await response.json();
+                    if (response.status === 200) {
+                        //updateDashboard(responseData.data);
+                        //return responseData.data;
+                        window.updateServID('default value');
+                        window.updateBusinessEmail('default value');
+                        window.updateBusinessName('default value');
+                        localStorage.removeItem('serviceID');
+                        localStorage.removeItem('businessEmail');
+                        localStorage.removeItem('businessName');
+                        window.location.href = 'index.html';
+                        return responseData.message;
+                        //console.log(dashboardData);
+                    }
+                } catch (error) {
+                    console.error('Error fetching dashboard data:', error);
+            }
+            
         });
     }
     
@@ -210,8 +235,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <p class="text-gray-600 text-sm">
                         Participants:
                         ${matchedUsers.length}
-                    </p>`
-                challengeCard.innerHTML += `
+                    </p>
+                    <img src="${challenge.qrUrl || ''}" alt="User Image" class="w-12 h-12 rounded-full mr-2">
                     ${matchedUsers.map((user,uidx) => `
                         <h4 class="pt-6 font-semibold text-lg">User #${uidx+1}: ${user.useremail}</h4>
                         ${user.images.map((image, index) => `
@@ -222,13 +247,102 @@ document.addEventListener('DOMContentLoaded', async function() {
                         </p>
                         <img src="${image}" alt="User Image" class="w-12 h-12 rounded-full mr-2">
                         `).join('')}
-                        `)}`;
+                        <div class="mt-4 border-t pt-4">
+                            <h4 class="font-semibold text-lg">Upload Video Response</h4>
+                            <div class="flex items-center space-x-4 mt-2">
+                            <input type="file" 
+                                    id="video-upload-${challenge.serviceID}" 
+                                    class="hidden" 
+                                    accept="video/*"
+                                    onchange="handleVideoUpload(event, '${challenge.serviceID}')">
+                            <label for="video-upload-${challenge.serviceID}" 
+                                    class="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer hover:bg-blue-600">
+                                Choose Video
+                            </label>
+                            <span id="video-name-${challenge.serviceID}" class="text-gray-600"></span>
+                            </div>
+                            <div id="video-preview-${challenge.serviceID}" class="mt-2">
+                                    <!-- Video preview will appear here -->
+                            </div>
+                            <!--
+                            <button id="uploadVideo-UserNo${uidx}"
+                                class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-600">
+                                    Confirm
+                            </button>
+                            -->
+                        </div> 
+                        `)}
+                    
+                        `;
+                
                 challengesList.appendChild(challengeCard);
             });
         } else {
             challengesList.innerHTML = '<p class="text-gray-500">No active challenges</p>';
         }
     }
+
+    window.handleVideoUpload = async (event, serviceID) => {
+        const file = event.target.files[0];
+        if (!file) return;
+    
+        // Update file name display
+        document.getElementById(`video-name-${serviceID}`).textContent = file.name;
+    
+        // Create video preview
+        const previewContainer = document.getElementById(`video-preview-${serviceID}`);
+        previewContainer.innerHTML = `
+            <video controls class="mt-2 max-w-full h-auto">
+                <source src="${URL.createObjectURL(file)}" type="${file.type}">
+                Your browser does not support the video tag.
+            </video>
+        `;
+        
+        //document.getElementById(`uploadVideo-UserNo${event.target.id.split('UserNo')[1]}`).addEventListener('click', () => {
+        //    uploadVideoToServer(file, serviceID);
+        //});
+
+        try {
+            // Convert video to base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64Video = e.target.result;
+                //console.log(base64Video);
+                
+                // Send to server
+                const response = await fetch(requestLink, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: "upload output",
+                        role: "booking",
+                        source: "platform",
+                        provider: window.businessName,
+                        type: "challenge",
+                        searchField: ["serviceID", "useremail"],
+                        value: [window.serviceID, window.signInEmail],
+                        data: base64Video
+                    })
+                });
+    
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const respData = await response.json();
+                if (response.status === 200) {
+                    alert('Video uploaded successfully!');
+                } else {
+                    throw new Error(respData.message || 'Failed to upload video');
+                }
+            };
+            reader.readAsDataURL(file);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to upload video. Please try again.');
+        }
+    };
+
     
     //Fecth exsiting challenges created by current busienss account
     async function fetchChallenges() {
@@ -285,7 +399,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <h3 class="text-lg font-semibold mb-2">${challenge.serviceID}</h3>
                 <div class="flex justify-between items-center mt-4">
                     <button class="edit-btn px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Edit Challenge</button>
-                    <button class="qr-btn px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">View QR Code</button>
+                    <button class="qr-btn px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" data-qr-url="${challenge.qrUrl || ''}">View QR Code</button>
                 </div>
             </div>
         `;
@@ -297,26 +411,27 @@ document.addEventListener('DOMContentLoaded', async function() {
         });
 
         // QR code button click handler
-        card.querySelector('.qr-btn').addEventListener('click', () => {
-            generateAndShowQRCode(challenge.serviceID);
+        
+        card.querySelector('.qr-btn').addEventListener('click', (e) => {
+            const qrUrl = e.target.getAttribute('data-qr-url');
+            if (qrUrl) {
+                showQRCode(qrUrl);
+            } else {
+                alert('QR code not available for this challenge');
+            }
         });
         
         return card;
     }
 
-    function generateAndShowQRCode(serviceID) {
-        // Generate QR code with the URL and serviceID
-        const baseUrl = window.location.origin + window.location.pathname.replace('admin/admin_portal.html', 'index.html');
-        const qrUrl = `${baseUrl}?serviceId=${serviceID}`;
+    function showQRCode(qrData) {
+        const qrImage = document.getElementById('qrImage');
         
-        // Clear previous QR code if any
-        document.getElementById('qrcode').innerHTML = '';
-        
-        // Generate new QR code
-        QRCode.toCanvas(document.getElementById('qrcode'), qrUrl, {
-            width: 200,
-            margin: 2
-        });
+        // Clear any existing QR code
+        document.getElementById('qrcode').innerHTML = `
+            <img src="${qrData}" id="qrImage" class="mx-auto sm:w-1/2" alt="QR Code">
+        `;
+        document.getElementById('challengeID').textContent = dashboardData.challenges[0].serviceID;
 
         // Show the modal
         document.getElementById('qrModal').classList.remove('hidden');
@@ -324,6 +439,20 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     window.closeQRModal = () => {
         document.getElementById('qrModal').classList.add('hidden');
+    };
+    
+    window.downloadQRCode = () => {
+        const qrImage = document.getElementById('qrImage');
+        
+        // Create a temporary link element
+        const downloadLink = document.createElement('a');
+        downloadLink.href = qrImage.src;
+        downloadLink.download = `qrcode_${window.serviceID}.png`;
+        
+        // Trigger download
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     };
 
     function createNewChallengeCard() {

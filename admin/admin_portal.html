@@ -6,7 +6,7 @@
     <title>Admin Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="../util.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="bg-gray-100">
     <div class="min-h-screen">
@@ -127,9 +127,14 @@
     <!-- QR Code Modal -->
     <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-xl">
-            <h2 class="text-xl font-bold mb-4">Challenge QR Code</h2>
-            <div id="qrcode" class="mb-4"></div>
-            <button onclick="closeQRModal()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Close</button>
+            <h2 class="text-xl font-bold mb-4">QR Code for <span id="challengeID"></span></h2>
+            <div id="qrcode" class="mb-4">
+                <img id="qrImage" class="mx-auto" alt="QR Code">
+            </div>
+            <div class="flex justify-between">
+                <button onclick="closeQRModal()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
+                <button onclick="downloadQRCode()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Download QR Code</button>
+            </div>
         </div>
     </div>
 

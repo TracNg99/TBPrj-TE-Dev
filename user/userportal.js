@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    
+    console.log(window.signInEmail);
+    // Check authentication
+    if (window.signInEmail === 'default value') {
+        console.log("User email:",window.signInEmail);
+        window.location.href = 'index.html';
+        //return;
+    }
+
+
     const portalTheme = document.createElement('div');
     //portalTheme.id = 'portal-container';
     //portalTheme.style.position = "relative";
@@ -419,8 +427,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
     
             if (response.status === 200) {
-                window.updateUserEmail('');
-                window.updateServID('');
+                window.updateUserEmail('default value');
+                window.updateServID('default value');
                 window.location.href = 'index.html';
             }
         } catch (error) {

@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Check authentication
+    if (window.signInEmail === 'default value') {
+        window.location.href = 'index.html';
+        return;
+    }
+
     console.log("ServiceID:", window.serviceID);
     const slideshowContainer = document.getElementById('slideshow-container');
 
@@ -678,8 +684,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let respData = await response.json();
             console.log(respData.message);
             if (response.status === 200) {
-                window.updateUserEmail('');
-                window.updateServID('');
+                window.updateUserEmail('default value');
+                window.updateServID('default value');
                 window.location.href = 'index.html';
             }
         } catch (error) {

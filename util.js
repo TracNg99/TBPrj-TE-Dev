@@ -2,7 +2,7 @@
 (function(global) {
     'use strict';
 
-    const DEFAULT_VALUE = "default value";
+    const DEFAULT_VALUE = 'default value';
 
     // Initialize the global object if it doesn't exist
     global.AppState = {
@@ -37,6 +37,7 @@
             this.businessEmail = input;
             localStorage.setItem("businessEmail", input);
         }
+
     };
 
     // Expose variables directly on window
