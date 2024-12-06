@@ -130,10 +130,10 @@ document.addEventListener("DOMContentLoaded", () => {
         `).join('');
     }
 
-    function sideBarContentDisplay(slideData) {
+    function FloatmapContentDisplay(slideData) {
         if (!slideData || !slideData.length) return '';
         return slideData.map((item, index) => `
-            <button id="sidebarGoToSlide${index}" 
+            <button id="FloatmapGoToSlide${index}" 
                     class="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-200">
                 ${item.title || `Slide ${index + 1}`}
             </button>
@@ -184,10 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
 
 
-                    <!-- Sidebar Toggle -->
+                    <!-- Floatmap Toggle -->
                         <div class="text-center">
-                            <button id="sidebarToggle" 
-                                class="fixed bottom-4 left-4 bg-primary text-white px-4 py-2 rounded-lg shadow-lg 
+                            <button id="FloatmapToggle" 
+                                class="fixed bottom-4 left-4 bg-primary text-white px-4 py-2 rounded-lg shadow-lg  
+                                ${statusSect[0] === 'block' ? 'hidden' : ''}
                                 hover:bg-blue-600 transform hover:scale-105 transition-all duration-200 cursor-move z-50"
                                 draggable="true">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,8 +196,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             </svg>
                             </button>
                     </div>
-                    <!-- Sidebar -->
-                    <div id="sidebar" class="fixed inset-0 flex items-center justify-center z-50 transform scale-0 opacity-0 
+                    <!-- Floatmap -->
+                    <div id="Floatmap" class="fixed inset-0 flex items-center justify-center z-50 transform scale-0 opacity-0 
                          transition-all duration-300 ease-in-out">
                         <div class="bg-white rounded-xl shadow-2xl w-11/12 max-w-4xl max-h-[90vh] overflow-y-auto p-6 relative">
                             <!-- Close Button -->
@@ -211,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <!-- Grid Layout -->
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 ${slides.map((slide, index) => `
-                                    <button id="sidebarGoToSlide${index}"
+                                    <button id="FloatmapGoToSlide${index}"
                                             class="group bg-white p-4 rounded-lg shadow-md hover:shadow-lg 
                                                    transition-all duration-200 flex flex-col items-center space-y-4
                                                    ${currentSlideIndex === index ? 'ring-2 ring-primary' : ''}">
@@ -234,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                     
                     <!-- Overlay -->
-                    <div id="sidebarOverlay" 
+                    <div id="FloatmapOverlay" 
                          class="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 opacity-0 pointer-events-none z-40">
                     </div>
                     <!-- Navigation Section -->
@@ -338,30 +339,30 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const FloatmapToggle = document.getElementById('FloatmapToggle');
+        const Floatmap = document.getElementById('Floatmap');
+        const FloatmapOverlay = document.getElementById('FloatmapOverlay');
         const closeOverlay = document.getElementById('closeOverlay');
 
-        sidebarToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('scale-0');
-            sidebar.classList.toggle('opacity-0');
-            sidebarOverlay.classList.toggle('opacity-0');
-            sidebarOverlay.classList.toggle('pointer-events-none');
+        FloatmapToggle.addEventListener('click', () => {
+            Floatmap.classList.toggle('scale-0');
+            Floatmap.classList.toggle('opacity-0');
+            FloatmapOverlay.classList.toggle('opacity-0');
+            FloatmapOverlay.classList.toggle('pointer-events-none');
         });
 
         closeOverlay.addEventListener('click', () => {
-            sidebar.classList.add('scale-0');
-            sidebar.classList.add('opacity-0');
-            sidebarOverlay.classList.add('opacity-0');
-            sidebarOverlay.classList.add('pointer-events-none');
+            Floatmap.classList.add('scale-0');
+            Floatmap.classList.add('opacity-0');
+            FloatmapOverlay.classList.add('opacity-0');
+            FloatmapOverlay.classList.add('pointer-events-none');
         });
 
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.add('scale-0');
-            sidebar.classList.add('opacity-0');
-            sidebarOverlay.classList.add('opacity-0');
-            sidebarOverlay.classList.add('pointer-events-none');
+        FloatmapOverlay.addEventListener('click', () => {
+            Floatmap.classList.add('scale-0');
+            Floatmap.classList.add('opacity-0');
+            FloatmapOverlay.classList.add('opacity-0');
+            FloatmapOverlay.classList.add('pointer-events-none');
         });
 
         const goToNav = document.getElementById('goToNav');
@@ -381,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (submitBtn) submitBtn.onclick = uploadPhotosContent;
 
         slides.map((_,jj) => {
-            document.getElementById(`sidebarGoToSlide${jj}`).onclick = () => chooseSlides(jj,1);
+            document.getElementById(`FloatmapGoToSlide${jj}`).onclick = () => chooseSlides(jj,1);
             document.getElementById(`goToSlide${jj}`).onclick = () => chooseSlides(jj,1);
             let slideBtnId = slides[jj].title;
             let slideInputButton = document.getElementById(slideBtnId.replace(/\s+/g, ""));
@@ -411,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
 
-        // Add drag functionality to sidebar toggle
+        // Add drag functionality to Floatmap toggle
         let isDragging = false;
         let currentX;
         let currentY;
@@ -420,7 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let xOffset = 0;
         let yOffset = 0;
 
-        sidebarToggle.addEventListener('mousedown', dragStart);
+        FloatmapToggle.addEventListener('mousedown', dragStart);
         document.addEventListener('mousemove', drag);
         document.addEventListener('mouseup', dragEnd);
         document.getElementById('logoutBtn').onclick = () => logout();
@@ -428,7 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
         function dragStart(e) {
             initialX = e.clientX - xOffset;
             initialY = e.clientY - yOffset;
-            if (e.target === sidebarToggle) {
+            if (e.target === FloatmapToggle) {
                 isDragging = true;
             }
         }
@@ -440,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentY = e.clientY - initialY;
                 xOffset = currentX;
                 yOffset = currentY;
-                setTranslate(currentX, currentY, sidebarToggle);
+                setTranslate(currentX, currentY, FloatmapToggle);
             }
         }
 
