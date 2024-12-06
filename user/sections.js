@@ -606,6 +606,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const images = Array.from(preview.querySelectorAll('img'))
             .map(img => (img.src.split(",")[1]));
 
+        if (userInputs.length == 0) {
+            alert("You are uploading challenge without any notes!");
+            userInputs = slides.map((slide) => ({
+                title: slide.title.replace(/\s+/g, ""),
+                text: ""
+            }));
+        }
+
         // Create upload payload
         const uploadData = {
             action: "challenge input",
