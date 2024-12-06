@@ -163,6 +163,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    //--Profile Section--
     async function fetchUserProfile() {
         //console.log(window.signInEmail);
         let uploadInfoText = {
@@ -259,6 +260,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
+    //--Chalenges Functions--
     async function fetchChallengesContent() {
         let uploadInfoText = {
             action: "get service", 
@@ -306,6 +308,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
     }
 
+
+    //--Dashboard Functions--
     async function fetchHistoryData() {
         try {
             const response = await fetch(serverURL, {
@@ -414,19 +418,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 })
             });
     
-            const responseData = await response.json();
             if (response.status === 200) {
-                //updateDashboard(responseData.data);
-                //return responseData.data;
-                return responseData.data;
-                //console.log(dashboardData);
+                window.updateUserEmail('');
+                window.updateServID('');
+                window.location.href = 'index.html';
             }
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         }
-        window.updateUserEmail('');
-        window.updateServID('');
-        window.location.href = 'index.html';
+        
     }
 
     async function initPage() {

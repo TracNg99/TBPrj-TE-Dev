@@ -675,20 +675,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     action: "sign out",
                 })
             });
-    
-            const responseData = await response.json();
+            let respData = await response.json();
+            console.log(respData.message);
             if (response.status === 200) {
-                //updateDashboard(responseData.data);
-                //return responseData.data;
-                return responseData.data;
-                //console.log(dashboardData);
+                window.updateUserEmail('');
+                window.updateServID('');
+                window.location.href = 'index.html';
             }
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         }
-        window.updateUserID(['', '']);
-        window.updateServID('');
-        window.location.href = 'index.html';
+        
     }
     // Initialize
     async function initSlideshow() {
