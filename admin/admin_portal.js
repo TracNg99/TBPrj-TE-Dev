@@ -28,9 +28,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
         // Fetch challenges when switching to challenges tab
         if (tabName === 'challenges') {
-            if (dashboardData.challenges) {
-                displayChallenges(dashboardData.challenges);
-            }
+            displayChallenges(dashboardData.challenges);
         }
     
         // Update tab styles
@@ -217,15 +215,16 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
     
     function updateDashboard(data) {
+        challengesCount = data.challenges ? data.challenges.length : 0;
         // Update statistics
-        document.getElementById('totalChallenges').textContent = data.challenges.length || 0;
-        document.getElementById('activeParticipants').textContent = data.participants.length || 0;
+        document.getElementById('totalChallenges').textContent = challengesCount;
+        document.getElementById('activeParticipants').textContent = challengesCount;
         document.getElementById('completedChallenges').textContent = data.participants.filter(item => ('images' in item || 'contents' in item)).length || 0;
         // Update active challenges list
         const challengesList = document.getElementById('activeChallengesList');
         challengesList.innerHTML = '';
     
-        if (data.challenges && data.challenges.length > 0) {
+        if (data.challenges && challengesCount > 0) {
             data.challenges.forEach(challenge => {
                 const challengeCard = document.createElement('div');
                 const matchedUsers = data.participants.filter(item => item.serviceID == challenge.serviceID);
@@ -378,26 +377,44 @@ document.addEventListener('DOMContentLoaded', async function() {
     function displayChallenges(challenges) {
         const challengesGrid = document.getElementById('challengesGrid');
         challengesGrid.innerHTML = ''; // Clear existing content
+
+        // Add "Create new challenge" card
+        const newChallengeCard = createNewChallengeCard();
+        challengesGrid.appendChild(newChallengeCard);
     
         // Add existing challenge cards
-        if (challenges || challenges.length !== 0) {
+        if (challenges && challenges.length > 0) {
             challenges.forEach(challenge => {
                 const card = createChallengeCard(challenge);
                 challengesGrid.appendChild(card);
             });
         }
-        // Add "Create new challenge" card
-        const newChallengeCard = createNewChallengeCard();
-        challengesGrid.appendChild(newChallengeCard);
+        
     }
+
+    function createNewChallengeCard() {
+        const card = document.createElement('div');
+        card.className = 'bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center justify-center min-h-[200px]';
+        card.innerHTML = `
+            <div class="text-4xl text-blue-500 mb-2">+</div>
+            <p class="text-gray-600">Create new challenge</p>
+        `;
+        
+        card.addEventListener('click', () => {
+            window.location.href = 'admin_challenge_cover.html';
+        });
+        
+        return card;
+    }
+
     
-    function createChallengeCard(challenge) {
+    function createChallengeCard(data) {
         const card = document.createElement('div');
         card.className = 'bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow';
         card.innerHTML = `
-            <img src="${challenge.logourl}" alt="${challenge.serviceID}" class="w-full h-48 object-cover">
+            <img src="${data.logourl}" alt="${data.serviceID}" class="w-full h-48 object-cover">
             <div class="p-4">
-                <h3 class="text-lg font-semibold mb-2">${challenge.serviceID}</h3>
+                <h3 class="text-lg font-semibold mb-2">${data.serviceID}</h3>
                 <div class="flex justify-between items-center mt-4">
                     <button class="edit-btn px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Edit Challenge</button>
                     <button class="qr-btn px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" data-qr-url="${challenge.qrUrl || ''}">View QR Code</button>
@@ -407,7 +424,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         // Edit button click handler
         card.querySelector('.edit-btn').addEventListener('click', () => {
-            window.updateServID(challenge.serviceID);
+            window.updateServID(data.serviceID);
             window.location.href = 'admin_challenge_locations.html';
         });
 
@@ -456,20 +473,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         document.body.removeChild(downloadLink);
     };
 
-    function createNewChallengeCard() {
-        const card = document.createElement('div');
-        card.className = 'bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer flex flex-col items-center justify-center min-h-[200px]';
-        card.innerHTML = `
-            <div class="text-4xl text-blue-500 mb-2">+</div>
-            <p class="text-gray-600">Create new challenge</p>
-        `;
-        
-        card.addEventListener('click', () => {
-            window.location.href = 'admin_challenge_cover.html';
-        });
-        
-        return card;
-    }
+    
 
     // Initialize tabs
     const tabs = ['profile', 'business', 'challenges', 'dashboard'];
