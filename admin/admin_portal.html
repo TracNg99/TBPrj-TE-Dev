@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../util.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen">
+        <!-- Top Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between h-16">
+                    <div class="flex">
+                        <div class="flex-shrink-0 flex items-center">
+                            <h1 class="text-xl font-bold">Admin Portal</h1>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span id="adminName" class="text-gray-700 mr-4"></span>
+                        <button id="logoutBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <!-- Tabs -->
+            <div class="mb-4 border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <button id="profileTab" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Profile
+                    </button>
+                    <button id="businessTab" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Business Info
+                    </button>
+                    <button id="challengesTab" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Challenges
+                    </button>
+                    <button id="dashboardTab" class="tab-btn border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                        Dashboard
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Content Sections -->
+            <div id="profileSection" class="tab-content hidden bg-white shadow rounded-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">Business Profile</h2>
+                <form id="profileForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Business Name</label>
+                        <input type="text" id="profileBusinessName" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="profileEmail" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3" readonly>
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Update Profile
+                    </button>
+                </form>
+            </div>
+
+            <div id="businessSection" class="tab-content hidden bg-white shadow rounded-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">Business Description</h2>
+                <form id="businessForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Description</label>
+                        <textarea id="businessDescription" rows="4" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Location</label>
+                        <input type="text" id="businessLocation" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Contact Number</label>
+                        <input type="tel" id="businessPhone" class="mt-1 block w-full border rounded-md shadow-sm py-2 px-3">
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        Update Business Info
+                    </button>
+                </form>
+            </div>
+
+            <div id="challengesSection" class="tab-content hidden">
+                <h2 class="text-lg font-semibold mb-4">Challenges</h2>
+                <div id="challengesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Challenge cards will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <div id="dashboardSection" class="tab-content hidden bg-white shadow rounded-lg p-6">
+                <h2 class="text-lg font-semibold mb-4">Challenge Dashboard</h2>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-blue-100 p-4 rounded-lg">
+                            <h3 class="font-semibold text-blue-800">Total Challenges</h3>
+                            <p id="totalChallenges" class="text-2xl font-bold text-blue-900">0</p>
+                        </div>
+                        <div class="bg-green-100 p-4 rounded-lg">
+                            <h3 class="font-semibold text-green-800">Active Participants</h3>
+                            <p id="activeParticipants" class="text-2xl font-bold text-green-900">0</p>
+                        </div>
+                        <div class="bg-purple-100 p-4 rounded-lg">
+                            <h3 class="font-semibold text-purple-800">Completed Challenges</h3>
+                            <p id="completedChallenges" class="text-2xl font-bold text-purple-900">0</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold mb-4">Active Challenges</h3>
+                        <div id="activeChallengesList" class="space-y-4">
+                            <!-- Active challenges will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl">
+            <h2 class="text-xl font-bold mb-4">Challenge QR Code</h2>
+            <div id="qrcode" class="mb-4"></div>
+            <button onclick="closeQRModal()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Close</button>
+        </div>
+    </div>
+
+    <script src="admin_portal.js"></script>
+</body>
+</html>

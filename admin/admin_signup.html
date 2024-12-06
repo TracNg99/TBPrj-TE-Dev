@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../util.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg">
+            <div class="p-6">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-gray-800">Create Admin Account</h1>
+                    <p class="text-gray-600">Register your business</p>
+                </div>
+
+                <div id="errorMessage" class="hidden mb-4 p-4 bg-red-100 text-red-700 rounded"></div>
+
+                <form id="signupForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="businessName">Business Name</label>
+                        <input type="text" id="businessName" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Business Email</label>
+                        <input type="email" id="email" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="password">Password</label>
+                        <input type="password" id="password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="businessType">Business Type</label>
+                        <select id="businessType" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                            <option value="">Select business type</option>
+                            <option value="platform">Platform</option>
+                            <option value="accomodation">Accomodation</option>
+                            <option value="tour_provider">Tour Provider</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="mt-4 text-center">
+                    <p class="text-gray-600">Already have an account? 
+                        <a href="index.html" class="text-blue-600 hover:underline">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="admin_signup.js"></script>
+</body>
+</html>
