@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${locations.length > 0 ? `
                     <button onclick="window.submitChallenge()" 
                             class="px-6 py-2 bg-success text-white rounded-lg hover:bg-green-700">
-                        Submit Challenge
+                        Generate QR code for challenge
                     </button>
                 ` : ''}
                 <button onclick="window.backToGrid()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">
@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <label class="block font-medium text-gray-700">Location Title</label>
                     <input type="text" id="locationTitle" 
                            value="${currentLocation.title}"
+                           onchange="window.updateLocationTitle(this.value)"
                            placeholder="Enter location title"
                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                 </div>
@@ -221,6 +222,10 @@ document.addEventListener("DOMContentLoaded", () => {
         renderLocationEditor(currentLocation);
     };
 
+    window.updateLocationTitle = (value) => {
+        currentLocation.title = value;
+    }
+
     window.updateSectionTitle = (index, value) => {
         currentLocation.sections[index].title = value;
     };
@@ -344,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 const respData = await response.json();
                 if (response.status === 200) {
-                    alert('QR-code uploaded successfully!');
+                    alert('QR-code uploaded successfully!\nAvailable in the Challenge tab in your portal!');
                     // Redirect to portal page
                     window.location.href = 'admin_portal.html';
                 } else {

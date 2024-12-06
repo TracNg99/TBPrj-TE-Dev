@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <h3 class="text-lg font-semibold mb-2">${data.serviceID}</h3>
                 <div class="flex justify-between items-center mt-4">
                     <button class="edit-btn px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Edit Challenge</button>
-                    <button class="qr-btn px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" data-qr-url="${challenge.qrUrl || ''}">View QR Code</button>
+                    <button class="qr-btn px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" data-qr-url="${data.qrUrl || ''}">View QR Code</button>
                 </div>
             </div>
         `;
@@ -494,7 +494,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (dashboardData.challenges) {
         for (let i = 0; i < dashboardData.challenges.length; i++) {
             bookedData = await fetchDashboardData(dashboardData.challenges[i].serviceID);
-            dashboardData['participants'].push(bookedData[0]);
+            if (bookedData) {
+                dashboardData['participants'].push(bookedData[0]);
+            }
         }
     }
     //console.log(dashboardData);
