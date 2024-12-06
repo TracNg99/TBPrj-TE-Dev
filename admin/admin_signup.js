@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    if (window.businessEmail !== 'default value'|| window.businessName !== 'default value' || window.serviceID !== 'default value') {
+        window.updateBusinessEmail('default value');
+        window.updateServID('default value');
+        window.updateBusinessName('default value');
+    }
     const signupForm = document.getElementById('signupForm');
     const errorMessage = document.getElementById('errorMessage');
     const requestURL = 'https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer';

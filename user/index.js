@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-
+    if (window.signInEmail !== 'default value'|| window.provider !== 'default value' || window.serviceID !== 'default value') {
+        window.updateUserEmail('default value');
+        window.updateServID('default value');
+        window.updateProviderID('default value');
+    }
+    
     const appContainer = document.getElementById('app');
     //let valueFromQRCode;
     let urlParams;

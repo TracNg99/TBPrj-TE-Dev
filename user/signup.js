@@ -1,4 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
+  if (window.signInEmail !== 'default value'|| window.provider !== 'default value' || window.serviceID !== 'default value') {
+    window.updateUserEmail('default value');
+    window.updateServID('default value');
+    window.updateProviderID('default value');
+  }
+  
   const infoTheme = document.createElement('div');
   infoTheme.id = 'welcome-container';
   infoTheme.style.position = "fixed"; 
@@ -19,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     infoTheme.innerHTML = `
     <div class="fixed inset-0 w-full h-full">
         <!-- Background Image -->
-        <img src="https://assets.onecompiler.app/42yzz337k/42yzyxrg5/DALL%C2%B7E%202024-11-24%2000.25.50%20-%20A%20vibrant%20digital%20art%20image%20of%20a%20group%20of%20friends%20standing%20together%20and%20looking%20at%20the%20sunrise%20over%20Ha%20Long%20Bay.%20The%20view%20captures%20the%20stunning%20beauty.webp" 
+        <img src="background.jpg" 
              alt="Background" 
              class="absolute inset-0 w-full h-full object-cover opacity-90">
 
