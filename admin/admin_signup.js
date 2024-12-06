@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     const signupForm = document.getElementById('signupForm');
     const errorMessage = document.getElementById('errorMessage');
-    const requestURL = 'https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer';
+    const serverURL = 'https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer';
 
     signupForm.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
-            const response = await fetch(requestURL, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

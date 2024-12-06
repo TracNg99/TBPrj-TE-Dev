@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     titleStatus: "hidden",
     textStatus: "hidden"
   };
-  let requestLink = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
+  let serverURL = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
   let userImg = [];
 
   function renderPage() {
@@ -328,7 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     window.updateServID(userInputs.title);
     try {
-        const response = await fetch(requestLink, {
+        const response = await fetch(serverURL, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

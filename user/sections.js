@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         searchField: "serviceID", 
         value: `${window.serviceID}`
     };
-    let requestLink = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
+    let serverURL = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
 
     function createSlideHTML(slideData) {
         if (!slideData) return '';
@@ -519,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function fetchSlideContent() {
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -620,7 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",

@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   //  };
 
   //  try {
-  //    const response = await fetch(requestLink, {
+  //    const response = await fetch(serverURL, {
   //        method: 'POST',
   //       headers: {
   //            "Content-Type": "application/json",

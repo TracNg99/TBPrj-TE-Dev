@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         return;
     }
     
-    let requestLink = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
+    let serverURL = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
     let dashboardData = {
         challenges: null,
         participants: []
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     async function fetchAdminProfile() {
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     async function updateProfile(formData) {
 
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             phone: formData.phone
         };
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     async function fetchDashboardData(servName) {
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 //console.log(base64Video);
                 
                 // Send to server
-                const response = await fetch(requestLink, {
+                const response = await fetch(serverURL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     //Fecth exsiting challenges created by current busienss account
     async function fetchChallenges() {
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

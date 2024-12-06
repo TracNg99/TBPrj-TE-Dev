@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const appContainer = document.getElementById('app');
     let locations = [];
     let currentLocation = null;
-    let requestLink = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
+    let serverURL = "https://us-central1-travel-app-practice-441004.cloudfunctions.net/httpRouting_WebClientVer";
 
     function renderLocationGrid() {
         const gridHTML = `
@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -323,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(qrCodeBase64);
             console.log(qrCodeBase64.split(",")[1]);
             try {
-                const response = await fetch(requestLink, {
+                const response = await fetch(serverURL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize
     async function init() {
         try {
-            const response = await fetch(requestLink, {
+            const response = await fetch(serverURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
