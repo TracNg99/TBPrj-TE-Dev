@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    console.log("ServiceID:", window.serviceID);
     const slideshowContainer = document.getElementById('slideshow-container');
 
     // State management
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Find existing input for this slide
         const existingInput = userInputs.find(input => input.title === slideData.title);
         const userInput = existingInput ? existingInput.text : '';
-        //console.log(slideData.title.replace(/\s+/g, ""));
+        
         return `
             <div class="relative w-full min-h-screen rounded-lg shadow-lg p-6 bg-gray-600">
   
@@ -535,17 +534,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const responseMessage = await response.json();
             console.log("HTTPS response status code:", response.status);
             console.log("HTTPS response message:", responseMessage.message);
-            console.log("HTTPS response content:", responseMessage.data[0].serviceID);
-            console.log("HTTPS response inner:", responseMessage.data[0].contents[0].title);
-            console.log(responseMessage.data[0].provider);
             window.updateProvider(responseMessage.data[0].provider);
             
             let slideInfo = []; //responseMessage.data[0].contents
-            console.log("Location data:",responseMessage.data[0].contents);
             for (let jj in responseMessage.data[0].contents) {
                 item = responseMessage.data[0].contents;
                 slideInfo.push(item.filter(e => e.locationID == `loc${jj}`)[0]);
-                console.log(slideInfo);
             }
 
             return slideInfo;
@@ -605,6 +599,10 @@ document.addEventListener("DOMContentLoaded", () => {
     async function uploadPhotosContent() {
         // Get all uploaded images
         const preview = document.getElementById('preview');
+        if (!preview.files){
+            alert("Please upload at least one image!");
+            return;
+        }
         const images = Array.from(preview.querySelectorAll('img'))
             .map(img => (img.src.split(",")[1]));
 
