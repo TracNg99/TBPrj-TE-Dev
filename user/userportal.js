@@ -376,6 +376,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     
     function renderHistory(data) {
+        dataLength = !data? 0 : data.length;
         return `
             <div class="tab-content bg-white shadow rounded-lg p-6">
                 <h2 class="text-lg font-semibold mb-4">Challenge Dashboard</h2>
@@ -383,11 +384,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="bg-green-100 p-4 rounded-lg">
                             <h3 class="font-semibold text-green-800">Participated</h3>
-                            <p class="text-2xl font-bold text-green-900">${data.length || 0}</p>
+                            <p class="text-2xl font-bold text-green-900">${dataLength}</p>
                         </div>
                         <div class="bg-purple-100 p-4 rounded-lg">
                             <h3 class="font-semibold text-purple-800">Completed</h3>
-                            <p  class="text-2xl font-bold text-purple-900">${data.length || 0}</p>
+                            <p  class="text-2xl font-bold text-purple-900">${dataLength}</p>
                         </div>
                     </div>
 
