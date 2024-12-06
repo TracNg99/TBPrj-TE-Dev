@@ -603,8 +603,17 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Please upload at least one image!");
             return;
         }
+
+        
         const images = Array.from(preview.querySelectorAll('img'))
             .map(img => (img.src.split(",")[1]));
+
+        if (images.length > slides.length){
+            alertMessage = "The number of photos exceeded number of locations!\nPlease upload one image per location only!\n";
+            alertMessage += "We are currently not support extra images uploading!\nSorry for this inconvenience!";
+            alert(alertMessage);
+            return;
+        }
 
         if (userInputs.length == 0) {
             alert("You are uploading challenge without any notes!");
